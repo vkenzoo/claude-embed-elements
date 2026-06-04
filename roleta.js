@@ -25,7 +25,7 @@
     --card-line:#f0e7da;--shadow:0 14px 40px rgba(34,28,60,.10);
   }
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-  .wrap{max-width:460px;margin:0 auto;padding:26px 22px 60px;position:relative;z-index:2}
+  .wrap{max-width:460px;margin:0 auto;padding:26px 22px 18px;position:relative;z-index:2}
   .date-banner{background:linear-gradient(120deg,#332d68,#231f50);color:#fff;border-radius:16px;padding:18px 20px;text-align:center;font-weight:700;font-size:clamp(11.5px,3.4vw,14px);letter-spacing:.4px;display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;box-shadow:0 10px 26px rgba(35,31,80,.28);margin-bottom:20px}
   .date-banner .cal{font-size:18px}
   .live-card{background:#fff;border:1px solid var(--card-line);border-radius:16px;padding:20px 22px;box-shadow:var(--shadow);position:relative;overflow:hidden;margin-bottom:26px}
@@ -94,15 +94,19 @@
   .price .new{font-weight:800;font-size:clamp(24px,8vw,30px);color:var(--ink);white-space:nowrap}
   .timer{background:#fffbe9;border:1px solid #f2e2a0;border-radius:12px;padding:13px;font-weight:700;font-size:15px;color:#b8860b;display:flex;align-items:center;justify-content:center;gap:7px}
   .timer b{color:#a9740a;font-variant-numeric:tabular-nums}
-  .cta{display:block;width:100%;margin-top:22px;border:none;cursor:pointer;background:linear-gradient(90deg,var(--orange),var(--orange-l));color:#fff;font-family:inherit;font-weight:700;font-size:17px;padding:19px;border-radius:14px;box-shadow:0 12px 26px rgba(247,148,29,.4);opacity:0;transform:translateY(10px);transition:opacity .5s .2s ease,transform .5s .2s ease}
-  .cta.show{opacity:1;transform:none;animation:rlctaPulse 2.4s ease-in-out 1s infinite}
-  .cta:active{transform:translateY(2px)}
-  @keyframes rlctaPulse{0%,100%{box-shadow:0 12px 26px rgba(247,148,29,.4)}50%{box-shadow:0 12px 40px rgba(247,148,29,.7)}}
+  /* sinalização (não-clicável) que aponta pro botão NATIVO da INLEAD */
+  .sinal{margin-top:22px;padding-bottom:14px;text-align:center;opacity:0;transform:translateY(10px);transition:opacity .5s .2s ease,transform .5s .2s ease}
+  .sinal.show{opacity:1;transform:none}
+  .sinal .nudge{color:var(--orange);font-weight:800;font-size:clamp(13px,3.6vw,15px)}
+  .sinal .chevs{display:flex;flex-direction:column;align-items:center;margin-top:5px}
+  .sinal .chev{width:clamp(15px,4vw,18px);height:clamp(15px,4vw,18px);border-right:4px solid var(--orange);border-bottom:4px solid var(--orange);transform:rotate(45deg);margin-top:-6px;border-radius:2px;animation:rlbob 1.2s ease-in-out infinite}
+  .sinal .chev:nth-child(2){animation-delay:.15s;opacity:.55}
+  @keyframes rlbob{0%,100%{transform:rotate(45deg) translate(0,0)}50%{transform:rotate(45deg) translate(5px,5px)}}
   #fx{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:50}
   .money{position:absolute;z-index:48;pointer-events:none;user-select:none;line-height:1;opacity:0;will-change:transform,opacity;backface-visibility:hidden;animation:rlfloatUp var(--dur,2.8s) cubic-bezier(.22,.7,.3,1) var(--delay,0s) forwards}
   @keyframes rlfloatUp{0%{opacity:0;transform:translate3d(0,18px,0) rotate(0deg) scale(.4)}16%{opacity:1;transform:translate3d(calc(var(--dx) * .2),-16px,0) rotate(calc(var(--r) * .25)) scale(1)}100%{opacity:0;transform:translate3d(var(--dx),calc(-1 * var(--rise)),0) rotate(var(--r)) scale(.92)}}
   .hint{text-align:center;font-size:12px;color:#bdbecb;margin-top:14px}
-  @media (max-width:380px){.wrap{padding:20px 14px 48px}.live-card{padding:18px 16px}.gift{padding:20px 16px 14px}.ticket-body{padding:20px 16px 22px}}
+  @media (max-width:380px){.wrap{padding:20px 14px 16px}.live-card{padding:18px 16px}.gift{padding:20px 16px 14px}.ticket-body{padding:20px 16px 22px}}
   `;
 
   var MARKUP = `
@@ -156,7 +160,10 @@
           <div class="timer">⚠️ Expira em <b id="timer">15:00</b></div>
         </div>
       </div>
-      <button class="cta" id="cta">Resgatar Desconto Agora!</button>
+      <div class="sinal" id="cta">
+        <div class="nudge">Resgate no botão abaixo</div>
+        <div class="chevs"><span class="chev"></span><span class="chev"></span></div>
+      </div>
     </div>
     <div class="hint" id="hint">Toque em GIRAR para girar a roleta</div>
   </div>`;
@@ -320,6 +327,8 @@
       var r=gid("result");
       r.classList.add("show");
       gid("cta").classList.add("show");
+      /* LIBERA botão(ões) nativos da INLEAD: marca o <body> p/ o CSS revelar */
+      try{ document.body.classList.add("preco-liberado"); }catch(e){}
       r.scrollIntoView({behavior:"smooth",block:"center"});
       startCountdown(15*60);
     },350);
@@ -393,11 +402,7 @@
     }
   }
 
-  /* CTA */
-  gid("cta").addEventListener("click",function(){
-    coin(ac()?AC.currentTime:0);
-    gid("cta").textContent="Resgatando seu desconto…";
-  });
+  /* CTA agora é só sinalização não-clicável (botão real = nativo da INLEAD) */
 }
   if(document.readyState!=="loading") boot();
   else document.addEventListener("DOMContentLoaded", boot);
