@@ -150,12 +150,12 @@
           <div class="valid"><span class="vchk">✓</span>VÁLIDO</div>
           <div class="party">🎉</div>
           <div class="won-label">VOCÊ GANHOU</div>
-          <div class="won-pct"><span class="big">63%</span><span class="off">OFF</span></div>
+          <div class="won-pct"><span class="big">95%</span><span class="off">OFF</span></div>
           <div class="divider"></div>
           <div class="price">
-            <span class="old">De R$ 100,00</span>
+            <span class="old">De R$ 1.497,00</span>
             <span class="arrow">→</span>
-            <span class="new">R$ 37,00</span>
+            <span class="new">R$ 67,00</span>
           </div>
           <div class="timer">⚠️ Expira em <b id="timer">15:00</b></div>
         </div>
@@ -174,7 +174,7 @@
 
   /* ============ CONFIG ============ */
   var SEGMENTS=[
-    {label:"63% OFF",c:"#F7941D"},
+    {label:"95% OFF",c:"#F7941D"},
     {label:"40% PIX",c:"#2E2A6E"},
     {label:"20% CARTÃO",c:"#F7941D"},
     {label:"5% PIX",c:"#2E2A6E"},
