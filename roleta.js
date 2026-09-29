@@ -13,6 +13,24 @@
     document.head.appendChild(pl);
   }
 
+  /* ===== CTA nativo da INLEAD =====
+     Esconde o(s) botao(oes) da INLEAD ate a roleta terminar, e revela com fade.
+     Pega qualquer id que contenha "btn_oferta" ou "btn-oferta" (underscore ou hifen),
+     entao nao depende da grafia exata configurada no painel.
+     Se este script nao carregar, o CSS tambem nao e injetado e o botao fica VISIVEL
+     por padrao -- falha para o lado seguro, sem deixar a pagina sem CTA. */
+  if(!document.getElementById("rl-cta-css")){
+    var cs=document.createElement("style");
+    cs.id="rl-cta-css";
+    cs.textContent =
+      'body:not(.preco-liberado) [id*="btn_oferta"],'+
+      'body:not(.preco-liberado) [id*="btn-oferta"]{display:none !important}'+
+      'body.preco-liberado [id*="btn_oferta"],'+
+      'body.preco-liberado [id*="btn-oferta"]{animation:rbAparece .5s ease both}'+
+      '@keyframes rbAparece{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}';
+    document.head.appendChild(cs);
+  }
+
   var CSS = `
   :host{
     display:block;width:100%;position:relative;overflow:hidden;
